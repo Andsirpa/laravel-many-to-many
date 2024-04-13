@@ -20,5 +20,10 @@ class Project extends Model
         'project_link',
         'type_id'
     ];
+
+    public function technology()
+    {
+        return $this->belongsToMany(Technology::class);
+    }
 }
 
