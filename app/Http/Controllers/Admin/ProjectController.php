@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateProjectRequest;
 use App\Http\Requests\EditProjectRequest;
 use App\Models\Project;
+use App\Models\Technology;
 use App\Models\Type;
 use Illuminate\Http\Request;
 
@@ -19,7 +20,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $post = Project::paginate(15);
+        $project = Project::paginate(15);
         return view('admin.project.index', compact('project'));
 
     }
@@ -31,9 +32,16 @@ class ProjectController extends Controller
      */
     public function create()
     {
+        $project = new Project;
+
+        $technologies = Technology::orderBy('label')->get();
+        return view('admin.projects.form', compact('project', 'technologies'));
+
         $types = Type::all();
         return view('admin.projects.create', compact('types'));
     }
+
+
 
     /**
      * Store a newly created resource in storage.
