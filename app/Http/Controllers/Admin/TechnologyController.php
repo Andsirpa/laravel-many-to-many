@@ -16,27 +16,11 @@ class TechnologyController extends Controller
         return view('admin.projects.form', compact('project', 'technologies'));
     }
 
-    public function store(Request $request)
+    public function edit(Project $project)
     {
-        $request->validate(
-            [
-
-                'technologies' => 'nullable|exists:technologies,id',
-            ],
-            [
-
-                'technologies.exists' => 'I tag selezionati non sono validi',
-            ]
-        );
-
-
-        $post = new Project;
-        $post->fill($data);
-        $post->save();
-
-
-        if (Arr::exists($data, "technologies"))
-            $post->technologies()->attach($data["technologies"]);
+        $technologies = Technology::orderBy('label')->get();
+        $project_technologies = $project->tags->pluck('id')->toArray();
+        return view('admin.projects.form', compact('project', 'technologies', 'project_technologies'));
     }
 
 

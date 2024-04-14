@@ -8,6 +8,7 @@ use App\Http\Requests\EditProjectRequest;
 use App\Models\Project;
 use App\Models\Technology;
 use App\Models\Type;
+// use App\Http\Controllers\Admin\Arr;
 use Illuminate\Http\Request;
 
 
@@ -46,12 +47,24 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validated();
+        $request->validate(
+            [
+
+                'technologies' => 'nullable|exists:technologies,id',
+            ],
+            [
+
+                'technologies.exists' => 'I tag selezionati non sono validi',
+            ]
+        );
 
         $data = $request->all();
         $new_project = new Project;
         $new_project->fill($data);
         $new_project->save();
+
+        if (Arr::exists($data, "technologies"))
+            $new_project->technologies()->attach($data["technologies"]);
 
         return redirect()->route('admin.projects.show', $new_project)->with('message', 'Project Created');
 
@@ -78,6 +91,7 @@ class ProjectController extends Controller
     {
         $types = Type::all();
         return view('admin.projects.edit', compact('project', 'types'));
+
     }
 
     /**
@@ -94,6 +108,12 @@ class ProjectController extends Controller
 
         $data = $request->all();
         $project->update($data);
+
+        if (Arr::exists($data, "technologies"))
+            $project->technologies()->sync($data["technologies"]);
+        else
+            $project->technologies()->detach();
+
         return redirect()->route('admin.projects.show', compact('project'))->with('message', 'Project Modified');
     }
 
