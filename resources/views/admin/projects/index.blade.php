@@ -14,6 +14,7 @@
                     <th scope="col">#</th>
                     <th scope="col">Project Name</th>
                     <th scope="col">Type</th>
+                    <th scope="col">Technologies</th>
                     <th scope="col">Author</th>
                     <th scope="col">Link</th>
                     <th scope="col"></th>
@@ -25,6 +26,17 @@
                         <th scope="row">{{ $project->id }}</th>
                         <td>{{ $project->title }}</td>
                         <td>{!! $project->type?->getBadge() !!}</td>
+                        <td>
+                            @forelse($project->technologies as $technology)
+                                {{ $technology->label }} @unless ($loop->last)
+                                    ,
+                                @else
+                                    .
+                                @endunless
+                            @empty
+                                -
+                            @endforelse
+                        </td>
                         <td>{{ $project->author }}</td>
                         <td><a href="{{ $project->project_link }}" target="_blank">Go to Project</a></td>
                         <td>

@@ -18,6 +18,18 @@
 
         <span class="mt-4 fs-5 fw-bold d-block">Type: {!! $project->type->getBadge() !!}</span>
 
+        <span class="mt-4 fs-5 fw-bold d-block">Technologies:
+            @forelse ($project->technologies as $technology)
+                {{ $technology->label }} @unless ($loop->last)
+                    ,
+                @else
+                    .
+                @endunless
+            @empty
+                No tag associated
+            @endforelse
+        </span>
+
         <span class="mt-4 fs-5 fw-bold d-block">Description:</span>
         <p>{{ $project->description }}</p>
 
