@@ -32,11 +32,6 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        $project = new Project;
-
-        $technologies = Technology::orderBy('label')->get();
-        return view('admin.projects.form', compact('project', 'technologies'));
-
         $types = Type::all();
         return view('admin.projects.create', compact('types'));
     }
@@ -59,8 +54,8 @@ class ProjectController extends Controller
         $new_project->save();
 
         return redirect()->route('admin.projects.show', $new_project)->with('message', 'Project Created');
-    }
 
+    }
 
     /**
      * Display the specified resource.
